@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AceReads | Film Corner</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-    <header class="site-header">
-        <nav class="site-nav" aria-label="Main navigation">
-            <a href="/" class="logo">AceReads ♡</a>
-            <div class="nav-links">
-                <a href="/books">Books</a>
-                <a href="/authors">Authors</a>
-                <a href="/quotes">Quotes</a>
-                <a href="/films" aria-current="page">Films</a>
-                <a href="/users/new">Sign Up</a>
-            </div>
-        </nav>
-    </header>
-    <main>
-        <h1 class="page-header">The Film Corner</h1>
-        <p class="subtitle">Stories that come to life on the big screen.</p>
-        <section aria-label="Film collection">
-            <ul class="content-list">
-                {% for film in films %}
-                    <li>{{ film }}</li>
-                {% endfor %}
-            </ul>
-        </section>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Paper Garden | The Literary Corner</title>
+        <link rel="stylesheet" href="/static/styles.css">
+    </head>
+    <body>
+        <header class="site-header">
+            <nav class="site-nav" aria-label="Main navigation">
+                <a href="/" class="logo">The Paper Garden ♡</a>
+                <div class="nav-links">
+                    <a href="/books">Books</a>
+                    <a href="/authors">Authors</a>
+                    <a href="/quotes">Quotes</a>
+                    <a href="/films" aria-current="page">Films</a>
+                    <a href="/users/new">Sign Up</a>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <h1 class="page-header">The Film Corner</h1>
+            <p class="subtitle">Stories that come to life on the big screen.</p>
+            <section aria-label="Film collection">
+                <ul class="content-list">
+                    {% for film in films %}
+                        <li>{{ film }}</li>
+                    {% endfor %}
+                </ul>
+            </section>
 
-        <section class="form" aria-labelledby="add-film-heading">
-            <h2 id="add-film-heading">Add to the film list</h2>
-            <p>Found a new favourite? Add it to the collection.</p>
-            <form method="POST" action="/films">
-                <label for="title">Title</label>
-                <input type="text" id="title" name="title" placeholder="e.g. (500) Days of Summer" required><br>
-                <label for="genre">Genre</label>
-                <input type="text" id="genre" name="genre" placeholder="e.g. Rom-Com" required><br>
-                <button type="submit">Add film</button>
-            </form>
-        </section>
-    </main>
-</body>
+            <section class="form" aria-labelledby="add-film-heading">
+                <h2 id="add-film-heading">Add to the film list</h2>
+                <p>Found a new favourite? Add it to the collection.</p>
+                <form method="POST" action="/films">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" placeholder="e.g. (500) Days of Summer" required><br>
+                    <label for="genre">Genre</label>
+                    <input type="text" id="genre" name="genre" placeholder="e.g. Rom-Com" required><br>
+                    <button type="submit">Add film</button>
+                </form>
+            </section>
+        </main>
+    </body>
 </html>

@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AceReads | Quotes Library</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-    <header class="site-header">
-        <nav class="site-nav" aria-label="Main navigation">
-            <a href="/" class="logo">AceReads ♡</a>
-            <div class="nav-links">
-                <a href="/books">Books</a>
-                <a href="/authors">Authors</a>
-                <a href="/quotes" aria-current="page">Quotes</a>
-                <a href="/films">Films</a>
-                <a href="/users/new">Sign Up</a>
-            </div>
-        </nav>
-    </header>
-    <main>
-        <h1 class="page-header">Quotes Library</h1>
-        <p class="subtitle">Words worth remembering.</p>
-        <section aria-label="Quotes collection">
-            <ul class="content-list">
-                {% for quote in quotes %}
-                    <li>{{ quote }}</li>
-                {% endfor %}
-            </ul>
-        </section>
-    </main>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Paper Garden | The Literary Corner</title>
+        <link rel="stylesheet" href="/static/styles.css">
+    </head>
+    <body>
+        <header class="site-header">
+            <nav class="site-nav" aria-label="Main navigation">
+                <a href="/" class="logo">The Paper Garden ♡</a>
+                <div class="nav-links">
+                    <a href="/books">Books</a>
+                    <a href="/authors">Authors</a>
+                    <a href="/quotes" aria-current="page">Quotes</a>
+                    <a href="/films">Films</a>
+                    <a href="/users/new">Sign Up</a>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <h1 class="page-header">Quotes Library</h1>
+            <p class="subtitle">Words worth remembering.</p>
+            <section aria-label="Quotes collection">
+                <ul class="content-list">
+                    {% for quote in quotes %}
+                        <li>{{ quote }}</li>
+                    {% endfor %}
+                </ul>
+            </section>
+        </main>
+    </body>
 </html>
