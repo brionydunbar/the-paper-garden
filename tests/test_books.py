@@ -38,7 +38,11 @@ def test_create_posts_book_to_database(page: Page):
     page.goto("http://127.0.0.1:5001/books")
     page.get_by_label("Title").fill("The Chronicles of Geronimo (the cat)")
     page.get_by_label("Author").fill("Geronimo")
-    page.get_by_role("button", name="Add book").click()
+    page.get_by_label("Synopsis").fill("A curious and adventurous cat named Geronimo embarks on a series of unexpected adventures, exploring the world beyond his familiar surroundings, encountering new friends and getting into all sorts of mischief along the way.")
+    page.get_by_label("Rating (0 - 5 stars)").fill("4")
+    page.get_by_label("Notes").fill("This is a fictional work of fiction.")
+    with page.expect_response(lambda response: "/books" in response.url and response.request.method == "POST") as response_info:
+        page.get_by_role("button", name="Add book").click()
     books = page.locator("li")
     new_book = books.all_inner_texts()[-1]
     assert new_book == "The Chronicles of Geronimo (the cat) by Geronimo"
@@ -59,6 +63,9 @@ def test_unauth_create_does_not_post_book_to_database(page: Page):
     page.goto("http://127.0.0.1:5001/books")
     page.get_by_label("Title").fill("The Chronicles of Geronimo (the cat)")
     page.get_by_label("Author").fill("Geronimo")
+    page.get_by_label("Synopsis").fill("A curious and adventurous cat named Geronimo embarks on a series of unexpected adventures, exploring the world beyond his familiar surroundings, encountering new friends and getting into all sorts of mischief along the way.")
+    page.get_by_label("Rating (0 - 5 stars)").fill("4")
+    page.get_by_label("Notes").fill("This is a fictional work of fiction.")
     page.get_by_role("button", name="Add book").click()
     books = page.locator("li")
     new_book = books.all_inner_texts()

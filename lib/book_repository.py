@@ -8,14 +8,14 @@ class BookRepository:
 
     # Retrieve all books
     def all(self):
-        rows = self._connection.execute('SELECT * from books')
+        rows = self._connection.execute('SELECT * from books ORDER BY id ASC')
         books = []
         for row in rows:
-            item = Book(row["title"], row["author"], row["id"])
+            item = Book(row["title"], row["author"], row["synopsis"], row["rating"], row["notes"], row["id"])
             books.append(item)
         return books
 
     # Create a new book
     def create(self, book):
-        self._connection.execute('INSERT INTO books (title, author) VALUES (%s, %s)', [book.title, book.author])
+        self._connection.execute('INSERT INTO books (title, author, synopsis, rating, notes) VALUES (%s, %s, %s, %s, %s)', [book.title, book.author, book.synopsis, book.rating, book.notes])
         return None

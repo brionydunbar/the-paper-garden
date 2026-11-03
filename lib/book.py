@@ -1,10 +1,13 @@
 class Book:
     # We initialise with all of our attributes
     # Each column in the table should have an attribute here
-    def __init__(self, title, author, id = None):
+    def __init__(self, title, author, synopsis, rating, notes, id = None):
         self.id = id
         self.title = title
         self.author = author
+        self.synopsis = synopsis
+        self.rating = rating
+        self.notes = notes
 
     # This tells Python how to compare two Artists. 
     # Without this, Python only checks if they are the same object in memory. 

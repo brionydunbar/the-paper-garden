@@ -63,7 +63,6 @@ def get_all_books():
     connection.connect()
     book_repository = BookRepository(connection)
     books = book_repository.all()
-    print(books)
     return render_template("books.html", books=books)
 
 # POST /books
@@ -74,7 +73,7 @@ def create_book():
     connection.connect()
     book_repository = BookRepository(connection)
     book_details = request.form
-    book = Book(title=book_details["title"], author=book_details["author"])
+    book = Book(title=book_details["title"], author=book_details["author"], synopsis=book_details["synopsis"], rating=book_details["rating"], notes=book_details["notes"])
     book_repository.create(book)
     return redirect("/books")
 
