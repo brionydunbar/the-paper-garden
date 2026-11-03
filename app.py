@@ -55,7 +55,7 @@ def create_session():
     else:
         return redirect("/sessions/new")
 
-# /BOOKS
+# BOOKS
 # GET /BOOKS - dynamic
 @app.route('/books', methods=['GET'])
 def get_all_books():
