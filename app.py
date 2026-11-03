@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from lib.database_connection import DatabaseConnection
 from lib.book_repository import BookRepository
 from lib.book import Book
@@ -6,13 +6,54 @@ from lib.film_repository import FilmRepository
 from lib.film import Film
 from lib.user_repository import UserRepository
 from lib.user import User
+from login_required import login_required
 
 app = Flask(__name__)
+app.secret_key = "some_really_secret_key"
 
 # LANDING PAGE
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
+
+# USERS
+# GET /USERS/NEW
+@app.route("/users/new", methods=["GET"])
+def get_signup_form():
+    return render_template("signup_form.html")
+
+# POST /USERS
+@app.route("/users", methods=["POST"])
+def create_user():
+    connection = DatabaseConnection()
+    connection.connect()
+    user_repository = UserRepository(connection)
+    user_details = request.form
+    user = User(username=user_details["username"], password=user_details["password"])
+    user_repository.create(user)
+    return redirect("/")
+
+# SESSIONS
+# GET /SESSIONS/NEW
+@app.route("/sessions/new", methods=["GET"])
+def get_login_form():
+    return render_template("login_form.html")
+
+# POST SESSIONS
+@app.route("/sessions", methods=["POST"])
+def create_session():
+    connection = DatabaseConnection()
+    connection.connect()
+    user_repository = UserRepository(connection)
+    username = request.form["username"]
+    password = request.form["password"]
+    user = user_repository.find(username)
+    if user and user.password == password:
+        session["user_id"] = user.id
+        session["username"] = user.username
+        return redirect("/")
+    else:
+        return redirect("/sessions/new")
 
 # /BOOKS
 # GET /BOOKS - dynamic
@@ -27,6 +68,7 @@ def get_all_books():
 
 # POST /books
 @app.route('/books', methods=['POST'])
+@login_required
 def create_book():
     connection = DatabaseConnection()
     connection.connect()
@@ -86,23 +128,6 @@ def quote_list():
     ]
     return render_template("/quotes.html", quotes=quote_list)
 
-
-# USERS
-# GET /USERS/NEW
-@app.route("/users/new", methods=["GET"])
-def get_signup_form():
-    return render_template("signup_form.html")
-
-# POST /USERS/NEW
-@app.route("/users", methods=["POST"])
-def create_user():
-    connection = DatabaseConnection()
-    connection.connect()
-    user_repository = UserRepository(connection)
-    user_details = request.form
-    user = User(username=user_details["username"], password=user_details["password"])
-    user_repository.create(user)
-    return redirect("/")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

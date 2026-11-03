@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Paper Garden | The Literary Corner</title>
+        <link rel="stylesheet" href="/static/styles.css">
+    </head>
+    <body>
+        <header class="site-header">
+            <nav class="site-nav" aria-label="Main navigation">
+                <a href="/" class="logo">The Paper Garden ♡</a>
+                <div class="nav-links">
+                    <a href="/books">Books</a>
+                    <a href="/authors">Authors</a>
+                    <a href="/quotes">Quotes</a>
+                    <a href="/films">Films</a>
+                    <a href="/users/new">Sign Up</a>
+                    <a href="/sessions/new" aria-current="page">Log In</a>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <section class="form" aria-labelledby="log-in">
+                <h2 id="log-in">Log in to your account</h2>
+                <form method="POST" action="/sessions">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Username" required><br>
+                    <label for="password">Password</label>
+                    <input type="text" id="password" name="password" placeholder="Password" required><br>
+                    <button type="submit">Log in</button>
+                </form>
+            </section>
+        </main>
+    </body>
+</html>
