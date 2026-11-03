@@ -15,7 +15,7 @@ def test_auth_integration():
         "password": "1234"
     })
 
-    assert response.status_code == 404
+    assert response.status_code == 302
     assert response.headers["Location"].endswith("/")
 
 def test_auth_playwright(page: Page):
