@@ -111,6 +111,21 @@ main {
     font-size: 1.1rem;
 }
 
+.button {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #49353D;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    align-content: center
+}
+
+.add-book-button {
+    text-align: center;
+    margin: 25px 0;
+}
+
 /* CONTENT CARDS */
 
 .card-grid {

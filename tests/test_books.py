@@ -36,6 +36,9 @@ def test_create_posts_book_to_database(page: Page):
     page.get_by_role("button").click()
 
     page.goto("http://127.0.0.1:5001/books")
+    page.get_by_role("link", name="Add a book").click()
+    
+    page.goto("http://127.0.0.1:5001/books/new")
     page.get_by_label("Title").fill("The Chronicles of Geronimo (the cat)")
     page.get_by_label("Author").fill("Geronimo")
     page.get_by_label("Synopsis").fill("A curious and adventurous cat named Geronimo embarks on a series of unexpected adventures, exploring the world beyond his familiar surroundings, encountering new friends and getting into all sorts of mischief along the way.")
@@ -48,25 +51,27 @@ def test_create_posts_book_to_database(page: Page):
     assert new_book == "The Chronicles of Geronimo (the cat) by Geronimo"
 
 # unauthorised
-def test_unauth_create_does_not_post_book_to_database(page: Page):
+def test_unauth_user_cannot_access_new_book_page(page: Page):
+    page.goto("http://127.0.0.1:5001/books/new")
+    assert "/sessions/new" in page.url
+    assert "next=/books/new" in page.url
+
+def test_unauth_user_cannot_post_book_to_database(page: Page):
     connection = DatabaseConnection()
     connection.connect()
     connection.seed("./seeds/book_store.sql")
     connection.execute("TRUNCATE TABLE users;")
-    connection.execute("INSERT INTO users (username, password) values ('test', '1234');")
 
-    page.goto("http://127.0.0.1:5001/sessions/new")
-    page.get_by_placeholder("username").fill("test1")
-    page.get_by_placeholder("password").fill("12345")
-    page.get_by_role("button").click()
+    response = page.request.post(
+        "http://127.0.0.1:5001/books",
+        form={
+            "title": "The Chronicles of Geronimo (the cat)",
+            "author": "Geronimo",
+            "synopsis": "A curious cat goes on adventures.",
+            "rating": "4",
+            "notes": "A fictional work."
+        }
+    )
 
-    page.goto("http://127.0.0.1:5001/books")
-    page.get_by_label("Title").fill("The Chronicles of Geronimo (the cat)")
-    page.get_by_label("Author").fill("Geronimo")
-    page.get_by_label("Synopsis").fill("A curious and adventurous cat named Geronimo embarks on a series of unexpected adventures, exploring the world beyond his familiar surroundings, encountering new friends and getting into all sorts of mischief along the way.")
-    page.get_by_label("Rating (0 - 5 stars)").fill("4")
-    page.get_by_label("Notes").fill("This is a fictional work of fiction.")
-    page.get_by_role("button", name="Add book").click()
-    books = page.locator("li")
-    new_book = books.all_inner_texts()
-    assert new_book == [] # empty list as no book created
+    assert response.status == 200
+    assert response.url == "http://127.0.0.1:5001/sessions/new?next=/books"

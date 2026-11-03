@@ -48,10 +48,11 @@ def create_session():
     username = request.form["username"]
     password = request.form["password"]
     user = user_repository.find(username)
+    next_page = request.form.get("next")
     if user and user.password == password:
         session["user_id"] = user.id
         session["username"] = user.username
-        return redirect("/")
+        return redirect(next_page or "/")
     else:
         return redirect("/sessions/new")
 
@@ -64,6 +65,12 @@ def get_all_books():
     book_repository = BookRepository(connection)
     books = book_repository.all()
     return render_template("books.html", books=books)
+
+# GET /BOOKS/NEW
+@app.route("/books/new", methods=["GET"])
+@login_required
+def get_book_form():
+    return render_template("book_form.html")
 
 # POST /books
 @app.route('/books', methods=['POST'])
