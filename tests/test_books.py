@@ -1,5 +1,6 @@
 from playwright.sync_api import Page, expect
 from lib.database_connection import DatabaseConnection
+from werkzeug.security import generate_password_hash
 
 def test_books_has_heading(page: Page):
     page.goto("http://127.0.0.1:5001/books")
@@ -34,8 +35,9 @@ def test_create_posts_book_to_database(page: Page):
     connection = DatabaseConnection()
     connection.connect()
     connection.seed("./seeds/book_store.sql")
-    connection.execute("TRUNCATE TABLE users;")
-    connection.execute("INSERT INTO users (username, password) values ('test', '1234');")
+    connection.execute("TRUNCATE TABLE users RESTART IDENTITY;")
+    hashed = generate_password_hash("1234", method="pbkdf2:sha256")
+    connection.execute("INSERT INTO users (username, password) VALUES (%s, %s)", ["test", hashed])
 
     page.goto("http://127.0.0.1:5001/sessions/new")
     page.get_by_placeholder("username").fill("test")
@@ -67,7 +69,7 @@ def test_unauth_user_cannot_post_book_to_database(page: Page):
     connection = DatabaseConnection()
     connection.connect()
     connection.seed("./seeds/book_store.sql")
-    connection.execute("TRUNCATE TABLE users;")
+    connection.execute("TRUNCATE TABLE users RESTART IDENTITY;")
 
     response = page.request.post(
         "http://127.0.0.1:5001/books",

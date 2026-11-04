@@ -1,8 +1,7 @@
-import sys
-import os
-
 from app import app
 from lib.database_connection import DatabaseConnection
+from playwright.async_api import Page
+from werkzeug.security import generate_password_hash
 
 def test_create_user_is_saved_to_database():
     # create the test client to send requests without using Playwright and a browser
@@ -25,3 +24,10 @@ def test_create_user_is_saved_to_database():
     assert len(result) == 1
     assert result[0]['username'] == 'testuser'
 
+def test_signup_redirects_to_login(page: Page):
+    page.goto("http://127.0.0.1:5001/users/new")
+    page.get_by_label("Username").fill("test")
+    page.get_by_label("Password").fill("1234")
+    page.get_by_role("button").click()
+
+    assert page.url == "http://127.0.0.1:5001/sessions/new"

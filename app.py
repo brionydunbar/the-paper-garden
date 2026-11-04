@@ -6,6 +6,7 @@ from lib.film_repository import FilmRepository
 from lib.film import Film
 from lib.user_repository import UserRepository
 from lib.user import User
+from werkzeug.security import generate_password_hash, check_password_hash
 from login_required import login_required
 
 app = Flask(__name__)
@@ -29,9 +30,10 @@ def create_user():
     connection.connect()
     user_repository = UserRepository(connection)
     user_details = request.form
-    user = User(username=user_details["username"], password=user_details["password"])
+    hashed = generate_password_hash(user_details["password"], method="pbkdf2:sha256")
+    user = User(username=user_details["username"], password=hashed)
     user_repository.create(user)
-    return redirect("/")
+    return redirect("/sessions/new")
 
 # SESSIONS
 # GET /SESSIONS/NEW
@@ -48,11 +50,10 @@ def create_session():
     username = request.form["username"]
     password = request.form["password"]
     user = user_repository.find(username)
-    next_page = request.form.get("next")
-    if user and user.password == password:
+    if user and check_password_hash(user.password, password):
         session["user_id"] = user.id
         session["username"] = user.username
-        return redirect(next_page or "/")
+        return redirect("/")
     else:
         return redirect("/sessions/new")
 

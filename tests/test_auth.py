@@ -1,14 +1,16 @@
 from app import app
 from lib.database_connection import DatabaseConnection
 from playwright.async_api import Page
+from werkzeug.security import generate_password_hash
 
 # successful authentication tests
 def test_auth_integration():
     client = app.test_client()
     connection = DatabaseConnection()
     connection.connect()
-    connection.execute("TRUNCATE TABLE users;")
-    connection.execute("INSERT INTO users (username, password) VALUES ('test', '1234');")
+    connection.execute("TRUNCATE TABLE users RESTART IDENTITY;")
+    hashed = generate_password_hash("1234", method="pbkdf2:sha256")
+    connection.execute("INSERT INTO users (username, password) VALUES (%s, %s)", ["test", hashed])
     
     response = client.post("/sessions", data={
         "username": "test",
@@ -21,8 +23,9 @@ def test_auth_integration():
 def test_auth_playwright(page: Page):
     connection = DatabaseConnection()
     connection.connect()
-    connection.execute("TRUNCATE TABLE users;")
-    connection.execute("INSERT INTO users (username, password) values ('test', '1234');")
+    connection.execute("TRUNCATE TABLE users RESTART IDENTITY;")
+    hashed = generate_password_hash("1234", method="pbkdf2:sha256")
+    connection.execute("INSERT INTO users (username, password) VALUES (%s, %s)", ["test", hashed])
 
     page.goto("http://127.0.0.1:5001/sessions/new")
     page.get_by_label("Username").fill("test")
@@ -37,8 +40,9 @@ def test_failed_auth_integration():
     client = app.test_client()
     connection = DatabaseConnection()
     connection.connect()
-    connection.execute("TRUNCATE TABLE users;")
-    connection.execute("INSERT INTO users (username, password) VALUES ('test', '1234');")
+    connection.execute("TRUNCATE TABLE users RESTART IDENTITY;")
+    hashed = generate_password_hash("1234", method="pbkdf2:sha256")
+    connection.execute("INSERT INTO users (username, password) VALUES (%s, %s)", ["test", hashed])
     
     response = client.post("/sessions", data={
         "username": "test1",
@@ -51,8 +55,9 @@ def test_failed_auth_integration():
 def test_failed_auth_playwright(page: Page):
     connection = DatabaseConnection()
     connection.connect()
-    connection.execute("TRUNCATE TABLE users;")
-    connection.execute("INSERT INTO users (username, password) values ('test', '1234');")
+    connection.execute("TRUNCATE TABLE users RESTART IDENTITY;")
+    hashed = generate_password_hash("1234", method="pbkdf2:sha256")
+    connection.execute("INSERT INTO users (username, password) VALUES (%s, %s)", ["test", hashed])
 
     page.goto("http://127.0.0.1:5001/sessions/new")
     page.get_by_label("Username").fill("test1")
