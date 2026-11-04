@@ -31,7 +31,7 @@
             <section aria-label="My book collection">
                 <ul class="content-list">
                     {% for book in books %}
-                        <li>{{ book }}</li>
+                        <a href="/books/{{ book.id }}"><li>{{ book }}</li></a>
                     {% endfor %}
                 </ul>
             </section>

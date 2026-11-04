@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS books (
     notes TEXT
 );
 
-TRUNCATE table books;
+TRUNCATE table books RESTART IDENTITY CASCADE;
 
 INSERT INTO books (title, author, synopsis, rating, notes)
 VALUES
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS films (
     genre VARCHAR(255)
 );
 
-TRUNCATE TABLE films;
+TRUNCATE TABLE films RESTART IDENTITY CASCADE;
 
 INSERT INTO films (title, genre) VALUES ('The Grand Budapest Hotel', 'Comedy');
 INSERT INTO films (title, genre) VALUES ('Interstellar', 'Sci-Fi');

@@ -57,7 +57,7 @@ def create_session():
         return redirect("/sessions/new")
 
 # BOOKS
-# GET /BOOKS - dynamic
+# GET /BOOKS - database
 @app.route('/books', methods=['GET'])
 def get_all_books():
     connection = DatabaseConnection()
@@ -66,13 +66,22 @@ def get_all_books():
     books = book_repository.all()
     return render_template("books.html", books=books)
 
-# GET /BOOKS/NEW
+# GET /BOOKS/<ID> - database
+@app.route('/books/<int:id>', methods=['GET'])
+def get_book_by_id(id):
+    connection = DatabaseConnection()
+    connection.connect()
+    book_repository = BookRepository(connection)
+    book = book_repository.find(id)
+    return render_template("book.html", book=book)
+
+# GET /BOOKS/NEW - form
 @app.route("/books/new", methods=["GET"])
 @login_required
 def get_book_form():
     return render_template("book_form.html")
 
-# POST /books
+# POST /books - form
 @app.route('/books', methods=['POST'])
 @login_required
 def create_book():

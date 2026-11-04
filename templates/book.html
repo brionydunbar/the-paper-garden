@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Paper Garden | The Literary Corner</title>
+        <link rel="stylesheet" href="/static/styles.css">
+    </head>
+    <body>
+        <header class="site-header">
+            <nav class="site-nav" aria-label="Main navigation">
+                <a href="/" class="logo">The Paper Garden ♡</a>
+                <div class="nav-links">
+                    <a href="/books" aria-current="page">Books</a>
+                    <a href="/authors">Authors</a>
+                    <a href="/quotes">Quotes</a>
+                    <a href="/films">Films</a>
+                    <a href="/users/new">Sign Up</a>
+                    <a href="/sessions/new">Log In</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="book-store">
+
+            <h1 class="page-header">My Bookshelf</h1>
+            <p class="subtitle">A collection of stories to get lost in.</p>
+            <section class="book-detail-card" aria-label="Book details">
+                <h2 class="book-detail-title">{{ book.title }}</h2>
+                <p class="book-detail-author"> by {{ book.author }}</p>
+                <div class="book-detail-section">
+                    <h3>Synopsis</h3>
+                    <p>{{ book.synopsis }}</p>
+                </div> 
+                <div class="book-detail-section">
+                    <h3>Rating</h3>
+                    <p>{{ book.rating }}/5</p>
+                </div> 
+                <div class="book-detail-section">
+                    <h3>Notes</h3>
+                    <p>{{ book.notes }}</p>
+                </div> 
+
+                <a href="/books" class="back-link">← Back to bookshelf</a>
+            </section>
+
+        </main>
+    </body>
+</html>

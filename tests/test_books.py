@@ -21,6 +21,13 @@ def test_list_of_books_has_all_books(page: Page):
     actual_books = books.all_inner_texts()
     assert actual_books == expected_books
 
+def test_book_by_id_has_correct_information(page: Page):
+    connection = DatabaseConnection()
+    connection.connect()
+    connection.seed("./seeds/book_store.sql")
+    page.goto("http://127.0.0.1:5001/books/1")
+    expect(page.get_by_role("heading", name="The Gruffalo")).to_be_visible()
+
 # create books tests
 # authorised
 def test_create_posts_book_to_database(page: Page):

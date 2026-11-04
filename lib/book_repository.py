@@ -8,7 +8,9 @@ class BookRepository:
 
     # Retrieve all books
     def all(self):
-        rows = self._connection.execute('SELECT * from books ORDER BY id ASC')
+        rows = self._connection.execute('SELECT * FROM books ORDER BY id ASC')
+        if not rows:
+            return None
         books = []
         for row in rows:
             item = Book(row["title"], row["author"], row["synopsis"], row["rating"], row["notes"], row["id"])
@@ -19,3 +21,11 @@ class BookRepository:
     def create(self, book):
         self._connection.execute('INSERT INTO books (title, author, synopsis, rating, notes) VALUES (%s, %s, %s, %s, %s)', [book.title, book.author, book.synopsis, book.rating, book.notes])
         return None
+
+    # find a book by id
+    def find(self, id):
+        rows = self._connection.execute('SELECT * FROM books WHERE id = %s', [id])
+        if not rows:
+            return None
+        row = rows[0]
+        return Book(row["title"], row["author"], row["synopsis"], row["rating"], row["notes"], row["id"])
